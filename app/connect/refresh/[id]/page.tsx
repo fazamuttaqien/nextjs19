@@ -1,37 +1,36 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { createStripeConnectAccountLink } from "@/app/actions/create-stripe-connect-account-link";
-import { Loader2, AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
+import { createStripeConnectAccountLink } from "@/app/actions/create-stripe-connect-account-link"
+import { Loader2, AlertCircle } from "lucide-react"
 
 export default function Refresh() {
-  const params = useParams();
-  const connectedAccountId = params.id as string;
+  const params = useParams()
+  const connectedAccountId = params.id as string
   const [accountLinkCreatePending, setAccountLinkCreatePending] =
-    useState(false);
-  const [error, setError] = useState(false);
+    useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const createAccountLink = async () => {
       if (connectedAccountId) {
-        setAccountLinkCreatePending(true);
-        setError(false);
+        setAccountLinkCreatePending(true)
+        setError(false)
         try {
-          const { url } = await createStripeConnectAccountLink(
-            connectedAccountId
-          );
-          window.location.href = url;
+          const { url } =
+            await createStripeConnectAccountLink(connectedAccountId)
+          window.location.href = url
         } catch (error) {
-          console.error("Error creating account link:", error);
-          setError(true);
+          console.error("Error creating account link:", error)
+          setError(true)
         }
-        setAccountLinkCreatePending(false);
+        setAccountLinkCreatePending(false)
       }
-    };
+    }
 
-    createAccountLink();
-  }, [connectedAccountId]);
+    createAccountLink()
+  }, [connectedAccountId])
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -79,5 +78,5 @@ export default function Refresh() {
         </div>
       </div>
     </div>
-  );
+  )
 }

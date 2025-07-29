@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -8,6 +8,6 @@ const nextConfig: NextConfig = {
       { hostname: "wary-anaconda-29.convex.cloud", protocol: "https" },
     ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

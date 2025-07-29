@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { useParams } from "next/navigation";
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { Id } from "@/convex/_generated/dataModel";
-import EventForm from "@/components/EventForm";
-import { AlertCircle } from "lucide-react";
+import { useParams } from "next/navigation"
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
+import { Id } from "@/convex/_generated/dataModel"
+import EventForm from "@/components/EventForm"
+import { AlertCircle } from "lucide-react"
 
 export default function EditEventPage() {
-  const params = useParams();
+  const params = useParams()
   const event = useQuery(api.events.getById, {
     eventId: params.id as Id<"events">,
-  });
+  })
 
-  if (!event) return null;
+  if (!event) return null
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -40,5 +40,5 @@ export default function EditEventPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

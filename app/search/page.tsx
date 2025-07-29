@@ -1,32 +1,32 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { useSearchParams } from "next/navigation";
-import EventCard from "@/components/EventCard";
-import { Search } from "lucide-react";
-import Spinner from "@/components/Spinner";
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
+import { useSearchParams } from "next/navigation"
+import EventCard from "@/components/EventCard"
+import { Search } from "lucide-react"
+import Spinner from "@/components/Spinner"
 
 export default function SearchPage() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") || "";
-  const searchResults = useQuery(api.events.search, { searchTerm: query });
+  const searchParams = useSearchParams()
+  const query = searchParams.get("q") || ""
+  const searchResults = useQuery(api.events.search, { searchTerm: query })
 
   if (!searchResults) {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
         <Spinner />
       </div>
-    );
+    )
   }
 
   const upcomingEvents = searchResults
     .filter((event) => event.eventDate > Date.now())
-    .sort((a, b) => a.eventDate - b.eventDate);
+    .sort((a, b) => a.eventDate - b.eventDate)
 
   const pastEvents = searchResults
     .filter((event) => event.eventDate <= Date.now())
-    .sort((a, b) => b.eventDate - a.eventDate);
+    .sort((a, b) => b.eventDate - a.eventDate)
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -86,5 +86,5 @@ export default function SearchPage() {
         )}
       </div>
     </div>
-  );
+  )
 }

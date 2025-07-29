@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { Search } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Search } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function SearchBar() {
-  const router = useRouter();
-  const [query, setQuery] = useState("");
+  const router = useRouter()
+  const [query, setQuery] = useState("")
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`)
     }
-  };
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -34,5 +34,5 @@ export default function SearchBar() {
         </button>
       </form>
     </div>
-  );
+  )
 }

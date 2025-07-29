@@ -1,24 +1,24 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api"
+import { Id } from "@/convex/_generated/dataModel"
+import { useQuery } from "convex/react"
 import {
   CalendarDays,
   MapPin,
   ArrowRight,
   Clock,
   AlertTriangle,
-} from "lucide-react";
-import Link from "next/link";
-import Spinner from "./Spinner";
+} from "lucide-react"
+import Link from "next/link"
+import Spinner from "./Spinner"
 
 export default function TicketCard({ ticketId }: { ticketId: Id<"tickets"> }) {
-  const ticket = useQuery(api.tickets.getTicketWithDetails, { ticketId });
+  const ticket = useQuery(api.tickets.getTicketWithDetails, { ticketId })
 
-  if (!ticket || !ticket.event) return <Spinner />;
+  if (!ticket || !ticket.event) return <Spinner />
 
-  const isPastEvent = ticket.event.eventDate < Date.now();
+  const isPastEvent = ticket.event.eventDate < Date.now()
 
   const statusColors = {
     valid: isPastEvent
@@ -27,14 +27,14 @@ export default function TicketCard({ ticketId }: { ticketId: Id<"tickets"> }) {
     used: "bg-gray-50 text-gray-600 border-gray-200",
     refunded: "bg-red-50 text-red-700 border-red-100",
     cancelled: "bg-red-50 text-red-700 border-red-100",
-  };
+  }
 
   const statusText = {
     valid: isPastEvent ? "Ended" : "Valid",
     used: "Used",
     refunded: "Refunded",
     cancelled: "Cancelled",
-  };
+  }
 
   return (
     <Link
@@ -107,8 +107,8 @@ export default function TicketCard({ ticketId }: { ticketId: Id<"tickets"> }) {
               ticket.event.is_cancelled
                 ? "text-red-600"
                 : isPastEvent
-                ? "text-gray-600"
-                : "text-blue-600"
+                  ? "text-gray-600"
+                  : "text-blue-600"
             }`}
           >
             £{ticket.event.price.toFixed(2)}
@@ -119,5 +119,5 @@ export default function TicketCard({ ticketId }: { ticketId: Id<"tickets"> }) {
         </div>
       </div>
     </Link>
-  );
+  )
 }

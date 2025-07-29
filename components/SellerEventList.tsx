@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { useUser } from "@clerk/nextjs";
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
+import { useUser } from "@clerk/nextjs"
 import {
   CalendarDays,
   Edit,
@@ -10,24 +10,24 @@ import {
   Ban,
   Banknote,
   InfoIcon,
-} from "lucide-react";
-import Link from "next/link";
-import { useStorageUrl } from "@/lib/utils";
-import Image from "next/image";
-import CancelEventButton from "./CancelEventButton";
-import { Doc } from "@/convex/_generated/dataModel";
-import { Metrics } from "@/convex/events";
+} from "lucide-react"
+import Link from "next/link"
+import { useStorageUrl } from "@/lib/utils"
+import Image from "next/image"
+import CancelEventButton from "./CancelEventButton"
+import { Doc } from "@/convex/_generated/dataModel"
+import { Metrics } from "@/convex/events"
 
 export default function SellerEventList() {
-  const { user } = useUser();
+  const { user } = useUser()
   const events = useQuery(api.events.getSellerEvents, {
     userId: user?.id ?? "",
-  });
+  })
 
-  if (!events) return null;
+  if (!events) return null
 
-  const upcomingEvents = events.filter((e) => e.eventDate > Date.now());
-  const pastEvents = events.filter((e) => e.eventDate <= Date.now());
+  const upcomingEvents = events.filter((e) => e.eventDate > Date.now())
+  const pastEvents = events.filter((e) => e.eventDate <= Date.now())
 
   return (
     <div className="mx-auto space-y-8">
@@ -58,18 +58,18 @@ export default function SellerEventList() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function SellerEventCard({
   event,
 }: {
   event: Doc<"events"> & {
-    metrics: Metrics;
-  };
+    metrics: Metrics
+  }
 }) {
-  const imageUrl = useStorageUrl(event.imageStorageId);
-  const isPastEvent = event.eventDate < Date.now();
+  const imageUrl = useStorageUrl(event.imageStorageId)
+  const isPastEvent = event.eventDate < Date.now()
 
   return (
     <div
@@ -186,8 +186,8 @@ function SellerEventCard({
                   {event.is_cancelled
                     ? "Cancelled"
                     : isPastEvent
-                    ? "Ended"
-                    : "Active"}
+                      ? "Ended"
+                      : "Active"}
                 </p>
               </div>
             </div>
@@ -195,5 +195,5 @@ function SellerEventCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

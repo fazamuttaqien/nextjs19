@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import {
   Form,
   FormControl,
@@ -10,20 +10,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@clerk/nextjs";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
-import Image from "next/image";
-import { Id } from "@/convex/_generated/dataModel";
-import { Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useStorageUrl } from "@/lib/utils";
+} from "@/components/ui/form"
+import { z } from "zod"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { useUser } from "@clerk/nextjs"
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { useRouter } from "next/navigation"
+import { useRef, useState, useTransition } from "react"
+import Image from "next/image"
+import { Id } from "@/convex/_generated/dataModel"
+import { Loader2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { useStorageUrl } from "@/lib/utils"
 
 const formSchema = z.object({
   name: z.string().min(1, "Event name is required"),
@@ -37,44 +37,44 @@ const formSchema = z.object({
     ),
   price: z.number().min(0, "Price must be 0 or greater"),
   totalTickets: z.number().min(1, "Must have at least 1 ticket"),
-});
+})
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof formSchema>
 
 interface InitialEventData {
-  _id: Id<"events">;
-  name: string;
-  description: string;
-  location: string;
-  eventDate: number;
-  price: number;
-  totalTickets: number;
-  imageStorageId?: Id<"_storage">;
+  _id: Id<"events">
+  name: string
+  description: string
+  location: string
+  eventDate: number
+  price: number
+  totalTickets: number
+  imageStorageId?: Id<"_storage">
 }
 
 interface EventFormProps {
-  mode: "create" | "edit";
-  initialData?: InitialEventData;
+  mode: "create" | "edit"
+  initialData?: InitialEventData
 }
 
 export default function EventForm({ mode, initialData }: EventFormProps) {
-  const { user } = useUser();
-  const createEvent = useMutation(api.events.create);
-  const updateEvent = useMutation(api.events.updateEvent);
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
-  const currentImageUrl = useStorageUrl(initialData?.imageStorageId);
+  const { user } = useUser()
+  const createEvent = useMutation(api.events.create)
+  const updateEvent = useMutation(api.events.updateEvent)
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+  const { toast } = useToast()
+  const currentImageUrl = useStorageUrl(initialData?.imageStorageId)
 
   // Image upload
-  const imageInput = useRef<HTMLInputElement>(null);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
-  const updateEventImage = useMutation(api.storage.updateEventImage);
-  const deleteImage = useMutation(api.storage.deleteImage);
+  const imageInput = useRef<HTMLInputElement>(null)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const generateUploadUrl = useMutation(api.storage.generateUploadUrl)
+  const updateEventImage = useMutation(api.storage.updateEventImage)
+  const deleteImage = useMutation(api.storage.deleteImage)
 
-  const [removedCurrentImage, setRemovedCurrentImage] = useState(false);
+  const [removedCurrentImage, setRemovedCurrentImage] = useState(false)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -86,19 +86,19 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
       price: initialData?.price ?? 0,
       totalTickets: initialData?.totalTickets ?? 1,
     },
-  });
+  })
 
   async function onSubmit(values: FormData) {
-    if (!user?.id) return;
+    if (!user?.id) return
 
     startTransition(async () => {
       try {
-        let imageStorageId = null;
+        let imageStorageId = null
 
         // Handle image changes
         if (selectedImage) {
           // Upload new image
-          imageStorageId = await handleImageUpload(selectedImage);
+          imageStorageId = await handleImageUpload(selectedImage)
         }
 
         // Handle image deletion/update in edit mode
@@ -107,7 +107,7 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
             // Delete old image from storage
             await deleteImage({
               storageId: initialData.imageStorageId,
-            });
+            })
           }
         }
 
@@ -116,20 +116,20 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
             ...values,
             userId: user.id,
             eventDate: values.eventDate.getTime(),
-          });
+          })
 
           if (imageStorageId) {
             await updateEventImage({
               eventId,
               storageId: imageStorageId as Id<"_storage">,
-            });
+            })
           }
 
-          router.push(`/event/${eventId}`);
+          router.push(`/event/${eventId}`)
         } else {
           // Ensure initialData exists before proceeding with update
           if (!initialData) {
-            throw new Error("Initial event data is required for updates");
+            throw new Error("Initial event data is required for updates")
           }
 
           // Update event details
@@ -137,7 +137,7 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
             eventId: initialData._id,
             ...values,
             eventDate: values.eventDate.getTime(),
-          });
+          })
 
           // Update image - this will now handle both adding new image and removing existing image
           if (imageStorageId || removedCurrentImage) {
@@ -147,54 +147,54 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
               storageId: imageStorageId
                 ? (imageStorageId as Id<"_storage">)
                 : null,
-            });
+            })
           }
 
           toast({
             title: "Event updated",
             description: "Your event has been successfully updated.",
-          });
+          })
 
-          router.push(`/event/${initialData._id}`);
+          router.push(`/event/${initialData._id}`)
         }
       } catch (error) {
-        console.error("Failed to handle event:", error);
+        console.error("Failed to handle event:", error)
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: "There was a problem with your request.",
-        });
+        })
       }
-    });
+    })
   }
 
   async function handleImageUpload(file: File): Promise<string | null> {
     try {
-      const postUrl = await generateUploadUrl();
+      const postUrl = await generateUploadUrl()
       const result = await fetch(postUrl, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,
-      });
-      const { storageId } = await result.json();
-      return storageId;
+      })
+      const { storageId } = await result.json()
+      return storageId
     } catch (error) {
-      console.error("Failed to upload image:", error);
-      return null;
+      console.error("Failed to upload image:", error)
+      return null
     }
   }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
     if (file) {
-      setSelectedImage(file);
-      const reader = new FileReader();
+      setSelectedImage(file)
+      const reader = new FileReader()
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   return (
     <Form {...form}>
@@ -256,7 +256,7 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
                     onChange={(e) => {
                       field.onChange(
                         e.target.value ? new Date(e.target.value) : null
-                      );
+                      )
                     }}
                     value={
                       field.value
@@ -329,11 +329,11 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
                   <button
                     type="button"
                     onClick={() => {
-                      setSelectedImage(null);
-                      setImagePreview(null);
-                      setRemovedCurrentImage(true);
+                      setSelectedImage(null)
+                      setImagePreview(null)
+                      setRemovedCurrentImage(true)
                       if (imageInput.current) {
-                        imageInput.current.value = "";
+                        imageInput.current.value = ""
                       }
                     }}
                     className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
@@ -377,5 +377,5 @@ export default function EventForm({ mode, initialData }: EventFormProps) {
         </Button>
       </form>
     </Form>
-  );
+  )
 }

@@ -1,28 +1,28 @@
-"use server";
+"use server"
 
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe"
 
 export type AccountStatus = {
-  isActive: boolean;
-  requiresInformation: boolean;
+  isActive: boolean
+  requiresInformation: boolean
   requirements: {
-    currently_due: string[];
-    eventually_due: string[];
-    past_due: string[];
-  };
-  chargesEnabled: boolean;
-  payoutsEnabled: boolean;
-};
+    currently_due: string[]
+    eventually_due: string[]
+    past_due: string[]
+  }
+  chargesEnabled: boolean
+  payoutsEnabled: boolean
+}
 
 export async function getStripeConnectAccountStatus(
   stripeAccountId: string
 ): Promise<AccountStatus> {
   if (!stripeAccountId) {
-    throw new Error("No Stripe account ID provided");
+    throw new Error("No Stripe account ID provided")
   }
 
   try {
-    const account = await stripe.accounts.retrieve(stripeAccountId);
+    const account = await stripe.accounts.retrieve(stripeAccountId)
 
     return {
       isActive:
@@ -40,9 +40,9 @@ export async function getStripeConnectAccountStatus(
       },
       chargesEnabled: account.charges_enabled,
       payoutsEnabled: account.payouts_enabled,
-    };
+    }
   } catch (error) {
-    console.error("Error fetching Stripe Connect account status:", error);
-    throw new Error("Failed to fetch Stripe Connect account status");
+    console.error("Error fetching Stripe Connect account status:", error)
+    throw new Error("Failed to fetch Stripe Connect account status")
   }
 }

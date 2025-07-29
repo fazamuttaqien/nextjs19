@@ -1,29 +1,29 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import EventCard from "./EventCard";
-import Spinner from "./Spinner";
-import { CalendarDays, Ticket } from "lucide-react";
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
+import EventCard from "./EventCard"
+import Spinner from "./Spinner"
+import { CalendarDays, Ticket } from "lucide-react"
 
 export default function EventList() {
-  const events = useQuery(api.events.get);
+  const events = useQuery(api.events.get)
 
   if (!events) {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
         <Spinner />
       </div>
-    );
+    )
   }
 
   const upcomingEvents = events
     .filter((event) => event.eventDate > Date.now())
-    .sort((a, b) => a.eventDate - b.eventDate);
+    .sort((a, b) => a.eventDate - b.eventDate)
 
   const pastEvents = events
     .filter((event) => event.eventDate <= Date.now())
-    .sort((a, b) => b.eventDate - a.eventDate);
+    .sort((a, b) => b.eventDate - a.eventDate)
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -74,5 +74,5 @@ export default function EventList() {
         </>
       )}
     </div>
-  );
+  )
 }

@@ -1,9 +1,9 @@
-import { Doc } from "./_generated/dataModel";
+import { Doc } from "./_generated/dataModel"
 
 // Time constants in milliseconds
 export const DURATIONS = {
   TICKET_OFFER: 30 * 60 * 1000, // 30 minutes (Minimum Stripe allows for checkout expiry)
-} as const;
+} as const
 
 // Status types for better type safety
 export const WAITING_LIST_STATUS: Record<string, Doc<"waitingList">["status"]> =
@@ -12,11 +12,11 @@ export const WAITING_LIST_STATUS: Record<string, Doc<"waitingList">["status"]> =
     OFFERED: "offered",
     PURCHASED: "purchased",
     EXPIRED: "expired",
-  } as const;
+  } as const
 
 export const TICKET_STATUS: Record<string, Doc<"tickets">["status"]> = {
   VALID: "valid",
   USED: "used",
   REFUNDED: "refunded",
   CANCELLED: "cancelled",
-} as const;
+} as const

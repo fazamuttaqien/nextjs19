@@ -1,35 +1,35 @@
-"use client";
+"use client"
 
-import EventCard from "@/components/EventCard";
-import { Id } from "@/convex/_generated/dataModel";
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { CalendarDays, MapPin, Ticket, Users } from "lucide-react";
-import { useParams } from "next/navigation";
-import Spinner from "@/components/Spinner";
-import JoinQueue from "@/components/JoinQueue";
-import { SignInButton, useUser } from "@clerk/nextjs";
-import { useStorageUrl } from "@/lib/utils";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import EventCard from "@/components/EventCard"
+import { Id } from "@/convex/_generated/dataModel"
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
+import { CalendarDays, MapPin, Ticket, Users } from "lucide-react"
+import { useParams } from "next/navigation"
+import Spinner from "@/components/Spinner"
+import JoinQueue from "@/components/JoinQueue"
+import { SignInButton, useUser } from "@clerk/nextjs"
+import { useStorageUrl } from "@/lib/utils"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
 
 export default function EventPage() {
-  const { user } = useUser();
-  const params = useParams();
+  const { user } = useUser()
+  const params = useParams()
   const event = useQuery(api.events.getById, {
     eventId: params.id as Id<"events">,
-  });
+  })
   const availability = useQuery(api.events.getEventAvailability, {
     eventId: params.id as Id<"events">,
-  });
-  const imageUrl = useStorageUrl(event?.imageStorageId);
+  })
+  const imageUrl = useStorageUrl(event?.imageStorageId)
 
   if (!event || !availability) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Spinner />
       </div>
-    );
+    )
   }
 
   return (
@@ -135,5 +135,5 @@ export default function EventPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,27 +1,27 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import { dirname } from "path"
+import { fileURLToPath } from "url"
+import { FlatCompat } from "@eslint/eslintrc"
+import globals from "globals"
+import tseslint from "typescript-eslint"
 
-import prettierPlugin from "eslint-plugin-prettier";
-import prettierConfig from "eslint-config-prettier";
-import importPlugin from "eslint-plugin-import";
-import unusedImports from "eslint-plugin-unused-imports";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import sonarjs from "eslint-plugin-sonarjs";
-import promise from "eslint-plugin-promise";
-import node from "eslint-plugin-node";
-import unicorn from "eslint-plugin-unicorn";
-import perfectionist from "eslint-plugin-perfectionist";
+import prettierPlugin from "eslint-plugin-prettier"
+import prettierConfig from "eslint-config-prettier"
+import importPlugin from "eslint-plugin-import"
+import unusedImports from "eslint-plugin-unused-imports"
+import jsxA11y from "eslint-plugin-jsx-a11y"
+import sonarjs from "eslint-plugin-sonarjs"
+import promise from "eslint-plugin-promise"
+import node from "eslint-plugin-node"
+import unicorn from "eslint-plugin-unicorn"
+import perfectionist from "eslint-plugin-perfectionist"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   resolvePluginsRelativeTo: __dirname,
-});
+})
 
 const eslintConfig = tseslint.config(
   ...compat.extends("next/core-web-vitals", "next/typescript"),
@@ -147,6 +147,6 @@ const eslintConfig = tseslint.config(
 
   // Add Prettier as the last config to override the format rules.
   prettierConfig
-);
+)
 
-export default eslintConfig;
+export default eslintConfig

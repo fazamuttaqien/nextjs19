@@ -1,5 +1,5 @@
-import { query, mutation } from "./_generated/server";
-import { v } from "convex/values";
+import { query, mutation } from "./_generated/server"
+import { v } from "convex/values"
 
 export const getUserTicketForEvent = query({
   args: {
@@ -12,26 +12,26 @@ export const getUserTicketForEvent = query({
       .withIndex("by_user_event", (q) =>
         q.eq("userId", userId).eq("eventId", eventId)
       )
-      .first();
+      .first()
 
-    return ticket;
+    return ticket
   },
-});
+})
 
 export const getTicketWithDetails = query({
   args: { ticketId: v.id("tickets") },
   handler: async (ctx, { ticketId }) => {
-    const ticket = await ctx.db.get(ticketId);
-    if (!ticket) return null;
+    const ticket = await ctx.db.get(ticketId)
+    if (!ticket) return null
 
-    const event = await ctx.db.get(ticket.eventId);
+    const event = await ctx.db.get(ticket.eventId)
 
     return {
       ...ticket,
       event,
-    };
+    }
   },
-});
+})
 
 export const getValidTicketsForEvent = query({
   args: { eventId: v.id("events") },
@@ -42,9 +42,9 @@ export const getValidTicketsForEvent = query({
       .filter((q) =>
         q.or(q.eq(q.field("status"), "valid"), q.eq(q.field("status"), "used"))
       )
-      .collect();
+      .collect()
   },
-});
+})
 
 export const updateTicketStatus = mutation({
   args: {
@@ -57,6 +57,6 @@ export const updateTicketStatus = mutation({
     ),
   },
   handler: async (ctx, { ticketId, status }) => {
-    await ctx.db.patch(ticketId, { status });
+    await ctx.db.patch(ticketId, { status })
   },
-});
+})

@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { Id } from "@/convex/_generated/dataModel";
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
+import { Id } from "@/convex/_generated/dataModel"
 import {
   CalendarDays,
   MapPin,
@@ -13,38 +13,38 @@ import {
   XCircle,
   PencilIcon,
   StarIcon,
-} from "lucide-react";
-import { useUser } from "@clerk/nextjs";
-import PurchaseTicket from "./PurchaseTicket";
-import { useRouter } from "next/navigation";
-import { useStorageUrl } from "@/lib/utils";
-import Image from "next/image";
+} from "lucide-react"
+import { useUser } from "@clerk/nextjs"
+import PurchaseTicket from "./PurchaseTicket"
+import { useRouter } from "next/navigation"
+import { useStorageUrl } from "@/lib/utils"
+import Image from "next/image"
 
 export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
-  const { user } = useUser();
-  const router = useRouter();
-  const event = useQuery(api.events.getById, { eventId });
-  const availability = useQuery(api.events.getEventAvailability, { eventId });
+  const { user } = useUser()
+  const router = useRouter()
+  const event = useQuery(api.events.getById, { eventId })
+  const availability = useQuery(api.events.getEventAvailability, { eventId })
   const userTicket = useQuery(api.tickets.getUserTicketForEvent, {
     eventId,
     userId: user?.id ?? "",
-  });
+  })
   const queuePosition = useQuery(api.waitingList.getQueuePosition, {
     eventId,
     userId: user?.id ?? "",
-  });
-  const imageUrl = useStorageUrl(event?.imageStorageId);
+  })
+  const imageUrl = useStorageUrl(event?.imageStorageId)
 
   if (!event || !availability) {
-    return null;
+    return null
   }
 
-  const isPastEvent = event.eventDate < Date.now();
+  const isPastEvent = event.eventDate < Date.now()
 
-  const isEventOwner = user?.id === event?.userId;
+  const isEventOwner = user?.id === event?.userId
 
   const renderQueuePosition = () => {
-    if (!queuePosition || queuePosition.status !== "waiting") return null;
+    if (!queuePosition || queuePosition.status !== "waiting") return null
 
     if (availability.purchasedCount >= availability.totalTickets) {
       return (
@@ -54,7 +54,7 @@ export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
             <span className="text-gray-600">Event is sold out</span>
           </div>
         </div>
-      );
+      )
     }
 
     if (queuePosition.position === 2) {
@@ -72,7 +72,7 @@ export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
             <span className="text-amber-600 text-sm">Waiting for ticket</span>
           </div>
         </div>
-      );
+      )
     }
 
     return (
@@ -85,19 +85,19 @@ export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
           #{queuePosition.position}
         </span>
       </div>
-    );
-  };
+    )
+  }
 
   const renderTicketStatus = () => {
-    if (!user) return null;
+    if (!user) return null
 
     if (isEventOwner) {
       return (
         <div className="mt-4">
           <button
             onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/seller/events/${eventId}/edit`);
+              e.stopPropagation()
+              router.push(`/seller/events/${eventId}/edit`)
             }}
             className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200 shadow-sm flex items-center justify-center gap-2"
           >
@@ -105,7 +105,7 @@ export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
             Edit Event
           </button>
         </div>
-      );
+      )
     }
 
     if (userTicket) {
@@ -124,7 +124,7 @@ export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
             View your ticket
           </button>
         </div>
-      );
+      )
     }
 
     if (queuePosition) {
@@ -143,11 +143,11 @@ export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
             </div>
           )}
         </div>
-      );
+      )
     }
 
-    return null;
-  };
+    return null
+  }
 
   return (
     <div
@@ -247,5 +247,5 @@ export default function EventCard({ eventId }: { eventId: Id<"events"> }) {
         </div>
       </div>
     </div>
-  );
+  )
 }

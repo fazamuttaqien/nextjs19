@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { useUser } from "@clerk/nextjs";
-import TicketCard from "@/components/TicketCard";
-import { Ticket } from "lucide-react";
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
+import { useUser } from "@clerk/nextjs"
+import TicketCard from "@/components/TicketCard"
+import { Ticket } from "lucide-react"
 
 export default function MyTicketsPage() {
-  const { user } = useUser();
+  const { user } = useUser()
   const tickets = useQuery(api.events.getUserTickets, {
     userId: user?.id ?? "",
-  });
+  })
 
-  if (!tickets) return null;
+  if (!tickets) return null
 
-  const validTickets = tickets.filter((t) => t.status === "valid");
-  const otherTickets = tickets.filter((t) => t.status !== "valid");
+  const validTickets = tickets.filter((t) => t.status === "valid")
+  const otherTickets = tickets.filter((t) => t.status !== "valid")
 
   const upcomingTickets = validTickets.filter(
     (t) => t.event && t.event.eventDate > Date.now()
-  );
+  )
   const pastTickets = validTickets.filter(
     (t) => t.event && t.event.eventDate <= Date.now()
-  );
+  )
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -96,5 +96,5 @@ export default function MyTicketsPage() {
         )}
       </div>
     </div>
-  );
+  )
 }

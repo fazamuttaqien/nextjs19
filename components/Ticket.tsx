@@ -1,29 +1,29 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api"
+import { Id } from "@/convex/_generated/dataModel"
+import { useQuery } from "convex/react"
 import {
   CalendarDays,
   IdCard,
   MapPin,
   Ticket as TicketIcon,
   User,
-} from "lucide-react";
-import QRCode from "react-qr-code";
-import Spinner from "./Spinner";
-import { useStorageUrl } from "@/lib/utils";
-import Image from "next/image";
+} from "lucide-react"
+import QRCode from "react-qr-code"
+import Spinner from "./Spinner"
+import { useStorageUrl } from "@/lib/utils"
+import Image from "next/image"
 
 export default function Ticket({ ticketId }: { ticketId: Id<"tickets"> }) {
-  const ticket = useQuery(api.tickets.getTicketWithDetails, { ticketId });
+  const ticket = useQuery(api.tickets.getTicketWithDetails, { ticketId })
   const user = useQuery(api.users.getUserById, {
     userId: ticket?.userId ?? "",
-  });
-  const imageUrl = useStorageUrl(ticket?.event?.imageStorageId);
+  })
+  const imageUrl = useStorageUrl(ticket?.event?.imageStorageId)
 
   if (!ticket || !ticket.event || !user) {
-    return <Spinner />;
+    return <Spinner />
   }
 
   return (
@@ -53,8 +53,8 @@ export default function Ticket({ ticketId }: { ticketId: Id<"tickets"> }) {
             imageUrl
               ? "absolute bottom-0 left-0 right-0"
               : ticket.event.is_cancelled
-              ? "bg-red-600"
-              : "bg-blue-600"
+                ? "bg-red-600"
+                : "bg-blue-600"
           } `}
         >
           <h2
@@ -192,5 +192,5 @@ export default function Ticket({ ticketId }: { ticketId: Id<"tickets"> }) {
         </span>
       </div>
     </div>
-  );
+  )
 }

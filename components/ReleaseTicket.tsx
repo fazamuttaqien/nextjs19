@@ -1,36 +1,36 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { useState } from "react";
-import { XCircle } from "lucide-react";
+import { api } from "@/convex/_generated/api"
+import { Id } from "@/convex/_generated/dataModel"
+import { useMutation } from "convex/react"
+import { useState } from "react"
+import { XCircle } from "lucide-react"
 
 export default function ReleaseTicket({
   eventId,
   waitingListId,
 }: {
-  eventId: Id<"events">;
-  waitingListId: Id<"waitingList">;
+  eventId: Id<"events">
+  waitingListId: Id<"waitingList">
 }) {
-  const [isReleasing, setIsReleasing] = useState(false);
-  const releaseTicket = useMutation(api.waitingList.releaseTicket);
+  const [isReleasing, setIsReleasing] = useState(false)
+  const releaseTicket = useMutation(api.waitingList.releaseTicket)
 
   const handleRelease = async () => {
-    if (!confirm("Are you sure you want to release your ticket offer?")) return;
+    if (!confirm("Are you sure you want to release your ticket offer?")) return
 
     try {
-      setIsReleasing(true);
+      setIsReleasing(true)
       await releaseTicket({
         eventId,
         waitingListId,
-      });
+      })
     } catch (error) {
-      console.error("Error releasing ticket:", error);
+      console.error("Error releasing ticket:", error)
     } finally {
-      setIsReleasing(false);
+      setIsReleasing(false)
     }
-  };
+  }
 
   return (
     <button
@@ -41,5 +41,5 @@ export default function ReleaseTicket({
       <XCircle className="w-4 h-4" />
       {isReleasing ? "Releasing..." : "Release Ticket Offer"}
     </button>
-  );
+  )
 }

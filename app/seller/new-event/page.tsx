@@ -1,4 +1,4 @@
-import EventForm from "@/components/EventForm";
+import EventForm from "@/components/EventForm"
 
 export default function NewEventPage() {
   return (
@@ -16,5 +16,5 @@ export default function NewEventPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

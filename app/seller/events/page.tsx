@@ -1,12 +1,12 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import SellerEventList from "@/components/SellerEventList";
-import Link from "next/link";
-import { ArrowLeft, Plus } from "lucide-react";
+import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
+import SellerEventList from "@/components/SellerEventList"
+import Link from "next/link"
+import { ArrowLeft, Plus } from "lucide-react"
 
 export default async function SellerEventsPage() {
-  const { userId } = await auth();
-  if (!userId) redirect("/");
+  const { userId } = await auth()
+  if (!userId) redirect("/")
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -44,5 +44,5 @@ export default async function SellerEventsPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

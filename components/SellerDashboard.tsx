@@ -1,68 +1,66 @@
-"use client";
-import { createStripeConnectAccountLink } from "@/app/actions/create-stripe-connect-account-link";
-import { createStripeConnectCustomer } from "@/app/actions/create-stripe-connect-customer";
-import { api } from "@/convex/_generated/api";
-import { useUser } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
+"use client"
+import { createStripeConnectAccountLink } from "@/app/actions/create-stripe-connect-account-link"
+import { createStripeConnectCustomer } from "@/app/actions/create-stripe-connect-customer"
+import { api } from "@/convex/_generated/api"
+import { useUser } from "@clerk/nextjs"
+import { useQuery } from "convex/react"
 
-import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import { createStripeConnectLoginLink } from "@/app/actions/create-stripe-connect-login-link";
-import { getStripeConnectAccountStatus } from "@/app/actions/get-stripe-connect-account-status";
-import type { AccountStatus } from "@/app/actions/get-stripe-connect-account-status";
-import { CalendarDays, Cog, Plus } from "lucide-react";
-import Link from "next/link";
-import Spinner from "./Spinner";
+import { useRouter } from "next/navigation"
+import React, { useState, useEffect } from "react"
+import { createStripeConnectLoginLink } from "@/app/actions/create-stripe-connect-login-link"
+import { getStripeConnectAccountStatus } from "@/app/actions/get-stripe-connect-account-status"
+import type { AccountStatus } from "@/app/actions/get-stripe-connect-account-status"
+import { CalendarDays, Cog, Plus } from "lucide-react"
+import Link from "next/link"
+import Spinner from "./Spinner"
 
 export default function SellerDashboard() {
-  const [accountCreatePending, setAccountCreatePending] = useState(false);
+  const [accountCreatePending, setAccountCreatePending] = useState(false)
   const [accountLinkCreatePending, setAccountLinkCreatePending] =
-    useState(false);
-  const [error, setError] = useState(false);
-  const [accountStatus, setAccountStatus] = useState<AccountStatus | null>(
-    null
-  );
-  const router = useRouter();
-  const { user } = useUser();
+    useState(false)
+  const [error, setError] = useState(false)
+  const [accountStatus, setAccountStatus] = useState<AccountStatus | null>(null)
+  const router = useRouter()
+  const { user } = useUser()
   const stripeConnectId = useQuery(api.users.getUsersStripeConnectId, {
     userId: user?.id || "",
-  });
+  })
 
   const isReadyToAcceptPayments =
-    accountStatus?.isActive && accountStatus?.payoutsEnabled;
+    accountStatus?.isActive && accountStatus?.payoutsEnabled
 
   useEffect(() => {
     if (stripeConnectId) {
-      fetchAccountStatus();
+      fetchAccountStatus()
     }
-  }, [stripeConnectId]);
+  }, [stripeConnectId])
 
   if (stripeConnectId === undefined) {
-    return <Spinner />;
+    return <Spinner />
   }
 
   const handleManageAccount = async () => {
     try {
       if (stripeConnectId && accountStatus?.isActive) {
-        const loginUrl = await createStripeConnectLoginLink(stripeConnectId);
-        window.location.href = loginUrl;
+        const loginUrl = await createStripeConnectLoginLink(stripeConnectId)
+        window.location.href = loginUrl
       }
     } catch (error) {
-      console.error("Error accessing Stripe Connect portal:", error);
-      setError(true);
+      console.error("Error accessing Stripe Connect portal:", error)
+      setError(true)
     }
-  };
+  }
 
   const fetchAccountStatus = async () => {
     if (stripeConnectId) {
       try {
-        const status = await getStripeConnectAccountStatus(stripeConnectId);
-        setAccountStatus(status);
+        const status = await getStripeConnectAccountStatus(stripeConnectId)
+        setAccountStatus(status)
       } catch (error) {
-        console.error("Error fetching account status:", error);
+        console.error("Error fetching account status:", error)
       }
     }
-  };
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -122,18 +120,18 @@ export default function SellerDashboard() {
               </p>
               <button
                 onClick={async () => {
-                  setAccountCreatePending(true);
-                  setError(false);
+                  setAccountCreatePending(true)
+                  setError(false)
                   try {
-                    await createStripeConnectCustomer();
-                    setAccountCreatePending(false);
+                    await createStripeConnectCustomer()
+                    setAccountCreatePending(false)
                   } catch (error) {
                     console.error(
                       "Error creating Stripe Connect customer:",
                       error
-                    );
-                    setError(true);
-                    setAccountCreatePending(false);
+                    )
+                    setError(true)
+                    setAccountCreatePending(false)
                   }
                 }}
                 className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -257,21 +255,22 @@ export default function SellerDashboard() {
                   {!accountLinkCreatePending && (
                     <button
                       onClick={async () => {
-                        setAccountLinkCreatePending(true);
-                        setError(false);
+                        setAccountLinkCreatePending(true)
+                        setError(false)
                         try {
-                          const { url } = await createStripeConnectAccountLink(
-                            stripeConnectId
-                          );
-                          router.push(url);
+                          const { url } =
+                            await createStripeConnectAccountLink(
+                              stripeConnectId
+                            )
+                          router.push(url)
                         } catch (error) {
                           console.error(
                             "Error creating Stripe Connect account link:",
                             error
-                          );
-                          setError(true);
+                          )
+                          setError(true)
                         }
-                        setAccountLinkCreatePending(false);
+                        setAccountLinkCreatePending(false)
                       }}
                       className="mt-4 bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors"
                     >
@@ -323,5 +322,5 @@ export default function SellerDashboard() {
         </div>
       </div>
     </div>
-  );
+  )
 }

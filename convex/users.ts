@@ -1,5 +1,5 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { v } from "convex/values"
+import { mutation, query } from "./_generated/server"
 
 export const getUsersStripeConnectId = query({
   args: { userId: v.string() },
@@ -8,10 +8,10 @@ export const getUsersStripeConnectId = query({
       .query("users")
       .filter((q) => q.eq(q.field("userId"), args.userId))
       .filter((q) => q.neq(q.field("stripeConnectId"), undefined))
-      .first();
-    return user?.stripeConnectId;
+      .first()
+    return user?.stripeConnectId
   },
-});
+})
 
 export const updateOrCreateUserStripeConnectId = mutation({
   args: { userId: v.string(), stripeConnectId: v.string() },
@@ -19,15 +19,15 @@ export const updateOrCreateUserStripeConnectId = mutation({
     const user = await ctx.db
       .query("users")
       .withIndex("by_user_id", (q) => q.eq("userId", args.userId))
-      .first();
+      .first()
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("User not found")
     }
 
-    await ctx.db.patch(user._id, { stripeConnectId: args.stripeConnectId });
+    await ctx.db.patch(user._id, { stripeConnectId: args.stripeConnectId })
   },
-});
+})
 
 export const updateUser = mutation({
   args: {
@@ -40,15 +40,15 @@ export const updateUser = mutation({
     const existingUser = await ctx.db
       .query("users")
       .withIndex("by_user_id", (q) => q.eq("userId", userId))
-      .first();
+      .first()
 
     if (existingUser) {
       // Update existing user
       await ctx.db.patch(existingUser._id, {
         name,
         email,
-      });
-      return existingUser._id;
+      })
+      return existingUser._id
     }
 
     // Create new user
@@ -57,11 +57,11 @@ export const updateUser = mutation({
       name,
       email,
       stripeConnectId: undefined,
-    });
+    })
 
-    return newUserId;
+    return newUserId
   },
-});
+})
 
 export const getUserById = query({
   args: { userId: v.string() },
@@ -69,8 +69,8 @@ export const getUserById = query({
     const user = await ctx.db
       .query("users")
       .withIndex("by_user_id", (q) => q.eq("userId", userId))
-      .first();
+      .first()
 
-    return user;
+    return user
   },
-});
+})

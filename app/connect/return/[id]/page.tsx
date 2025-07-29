@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { CheckCircle2, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { CheckCircle2, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 export default function Return() {
   return (
@@ -47,5 +47,5 @@ export default function Return() {
         </div>
       </div>
     </div>
-  );
+  )
 }

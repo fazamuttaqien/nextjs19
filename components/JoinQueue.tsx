@@ -1,41 +1,41 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
-import { Id } from "@/convex/_generated/dataModel";
-import { WAITING_LIST_STATUS } from "@/convex/constants";
-import Spinner from "./Spinner";
-import { Clock, OctagonXIcon } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { ConvexError } from "convex/values";
+import { api } from "@/convex/_generated/api"
+import { useMutation, useQuery } from "convex/react"
+import { Id } from "@/convex/_generated/dataModel"
+import { WAITING_LIST_STATUS } from "@/convex/constants"
+import Spinner from "./Spinner"
+import { Clock, OctagonXIcon } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { ConvexError } from "convex/values"
 
 export default function JoinQueue({
   eventId,
   userId,
 }: {
-  eventId: Id<"events">;
-  userId: string;
+  eventId: Id<"events">
+  userId: string
 }) {
-  const { toast } = useToast();
-  const joinWaitingList = useMutation(api.events.joinWaitingList);
+  const { toast } = useToast()
+  const joinWaitingList = useMutation(api.events.joinWaitingList)
   const queuePosition = useQuery(api.waitingList.getQueuePosition, {
     eventId,
     userId,
-  });
+  })
   const userTicket = useQuery(api.tickets.getUserTicketForEvent, {
     eventId,
     userId,
-  });
-  const availability = useQuery(api.events.getEventAvailability, { eventId });
-  const event = useQuery(api.events.getById, { eventId });
+  })
+  const availability = useQuery(api.events.getEventAvailability, { eventId })
+  const event = useQuery(api.events.getById, { eventId })
 
-  const isEventOwner = userId === event?.userId;
+  const isEventOwner = userId === event?.userId
 
   const handleJoinQueue = async () => {
     try {
-      const result = await joinWaitingList({ eventId, userId });
+      const result = await joinWaitingList({ eventId, userId })
       if (result.success) {
-        console.log("Successfully joined waiting list");
+        console.log("Successfully joined waiting list")
       }
     } catch (error) {
       if (
@@ -47,27 +47,27 @@ export default function JoinQueue({
           title: "Slow down there!",
           description: error.data,
           duration: 5000,
-        });
+        })
       } else {
-        console.error("Error joining waiting list:", error);
+        console.error("Error joining waiting list:", error)
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: "Failed to join queue. Please try again later.",
-        });
+        })
       }
     }
-  };
+  }
 
   if (queuePosition === undefined || availability === undefined || !event) {
-    return <Spinner />;
+    return <Spinner />
   }
 
   if (userTicket) {
-    return null;
+    return null
   }
 
-  const isPastEvent = event.eventDate < Date.now();
+  const isPastEvent = event.eventDate < Date.now()
 
   return (
     <div>
@@ -105,5 +105,5 @@ export default function JoinQueue({
         </>
       )}
     </div>
-  );
+  )
 }

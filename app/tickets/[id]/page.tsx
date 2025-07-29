@@ -1,38 +1,38 @@
-"use client";
+"use client"
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { useUser } from "@clerk/nextjs";
-import { redirect, useParams } from "next/navigation";
-import Ticket from "@/components/Ticket";
-import Link from "next/link";
-import { ArrowLeft, Download, Share2 } from "lucide-react";
-import { useEffect } from "react";
+import { api } from "@/convex/_generated/api"
+import { Id } from "@/convex/_generated/dataModel"
+import { useQuery } from "convex/react"
+import { useUser } from "@clerk/nextjs"
+import { redirect, useParams } from "next/navigation"
+import Ticket from "@/components/Ticket"
+import Link from "next/link"
+import { ArrowLeft, Download, Share2 } from "lucide-react"
+import { useEffect } from "react"
 
 export default function TicketPage() {
-  const params = useParams();
-  const { user } = useUser();
+  const params = useParams()
+  const { user } = useUser()
   const ticket = useQuery(api.tickets.getTicketWithDetails, {
     ticketId: params.id as Id<"tickets">,
-  });
+  })
 
   useEffect(() => {
     if (!user) {
-      redirect("/");
+      redirect("/")
     }
 
     if (!ticket || ticket.userId !== user.id) {
-      redirect("/tickets");
+      redirect("/tickets")
     }
 
     if (!ticket.event) {
-      redirect("/tickets");
+      redirect("/tickets")
     }
-  }, [user, ticket]);
+  }, [user, ticket])
 
   if (!ticket || !ticket.event) {
-    return null;
+    return null
   }
 
   return (
@@ -126,5 +126,5 @@ export default function TicketPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
