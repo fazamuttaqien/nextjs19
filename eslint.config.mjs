@@ -105,10 +105,10 @@ const eslintConfig = tseslint.config(
       // ↕️ Sort imports for readability
       // Warning: this may conflict with "import/order". Choose one or configure it to avoid conflict.
       // If you're more of a perfectionist, remove "import/order".
-      "perfectionist/sort-imports": [
-        "error",
-        { type: "natural", order: "asc", "ignore-case": true, groups: [] },
-      ],
+      // "perfectionist/sort-imports": [
+      //   "error",
+      //   { type: "natural", order: "asc", "ignore-case": true, groups: [] },
+      // ],
 
       // 📁 Enforce consistent file naming (customized for Next.js App Router)
       "unicorn/filename-case": [
