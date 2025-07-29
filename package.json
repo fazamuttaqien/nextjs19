@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.27.1",
@@ -49,8 +52,21 @@
     "eslint-plugin-sonarjs": "^3.0.4",
     "eslint-plugin-unicorn": "^60.0.0",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.6",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.38.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "pnpm run lint:fix",
+      "pnpm run format"
+    ],
+    "*.{css,md,json}": [
+      "pnpm run format"
+    ]
   }
 }
