@@ -19,9 +19,7 @@ export async function getStripeConnectAccount() {
 
   const stripeConnectId = await convex.query(
     api.users.getUsersStripeConnectId,
-    {
-      userId,
-    }
+    { userId }
   )
 
   return {

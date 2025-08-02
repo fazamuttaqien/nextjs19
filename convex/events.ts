@@ -200,16 +200,8 @@ export const purchaseTicket = mutation({
     }),
   },
   handler: async (ctx, { eventId, userId, waitingListId, paymentInfo }) => {
-    console.log("Starting purchaseTicket handler", {
-      eventId,
-      userId,
-      waitingListId,
-    })
-
     // Verify waiting list entry exists and is valid
     const waitingListEntry = await ctx.db.get(waitingListId)
-    console.log("Waiting list entry:", waitingListEntry)
-
     if (!waitingListEntry) {
       console.error("Waiting list entry not found")
       throw new Error("Waiting list entry not found")
@@ -234,8 +226,6 @@ export const purchaseTicket = mutation({
 
     // Verify event exists and is active
     const event = await ctx.db.get(eventId)
-    console.log("Event details:", event)
-
     if (!event) {
       console.error("Event not found", { eventId })
       throw new Error("Event not found")
@@ -247,7 +237,6 @@ export const purchaseTicket = mutation({
     }
 
     try {
-      console.log("Creating ticket with payment info", paymentInfo)
       // Create ticket with payment info
       await ctx.db.insert("tickets", {
         eventId,
@@ -258,16 +247,13 @@ export const purchaseTicket = mutation({
         amount: paymentInfo.amount,
       })
 
-      console.log("Updating waiting list status to purchased")
       await ctx.db.patch(waitingListId, {
         status: WAITING_LIST_STATUS.PURCHASED,
       })
 
-      console.log("Processing queue for next person")
       // Process queue for next person
       await ctx.runMutation(internal.waitingList.processQueue, { eventId })
 
-      console.log("Purchase ticket completed successfully")
     } catch (error) {
       console.error("Failed to complete ticket purchase:", error)
       throw new Error(`Failed to complete ticket purchase: ${error}`)

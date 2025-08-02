@@ -15,9 +15,7 @@ export async function refundEventTickets(eventId: Id<"events">) {
   // Get event owner's Stripe Connect ID
   const stripeConnectId = await convex.query(
     api.users.getUsersStripeConnectId,
-    {
-      userId: event.userId,
-    }
+    { userId: event.userId }
   )
 
   if (!stripeConnectId) {

@@ -6,8 +6,6 @@ import Stripe from "stripe"
 import { StripeCheckoutMetaData } from "@/app/actions/create-stripe-checkout-session"
 
 export async function POST(req: Request) {
-  console.log("Webhook received")
-
   const body = await req.text()
   const headersList = await headers()
   const signature = headersList.get("stripe-signature") as string
@@ -34,7 +32,7 @@ export async function POST(req: Request) {
     const metadata = session.metadata as StripeCheckoutMetaData
 
     try {
-      const result = await convex.mutation(api.events.purchaseTicket, {
+      await convex.mutation(api.events.purchaseTicket, {
         eventId: metadata.eventId,
         userId: metadata.userId,
         waitingListId: metadata.waitingListId,
